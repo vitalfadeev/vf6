@@ -5,16 +5,22 @@ E {
 
 struct
 Located (E,N) {
-    LC[N]   origin;       // projected = origin.of (pare_rect_len)
-    bool[N] reverse_way;  // 0 - +x, 1 - -x
-    LC[N]   len;
+    LC[N]       origin;  // projected = origin.of (pare_rect_len)
+    bool[N]     way;     // [0,0] - +x,+y, [1,1] - -x,-y, [0,1] - +x,-y
+    LC[N]       len;
+    bool[N]     expand;
     //
-    L[N]    pro_loc;      // projected
-    L[N]    pro_len;      // projected
+    Projected!N projected;
     //
-    E       e;
+    E           e;
 }
 
+
+struct 
+Projected (N) {
+    L[N] loc;
+    L[N] len;
+}
 
 struct 
 ProLocLen (N) {
@@ -38,6 +44,7 @@ struct
 Located_Container (E,N) {
     L[N]            len;
     Located!(E,N)[] s;
+    bool            overflow_wrap;
 }
 
 struct 
