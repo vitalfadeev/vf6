@@ -1,11 +1,10 @@
 module vf.located;
 
 import vf.int32x2 : int32x2;
-import vf.tree : Tree;
 
 
 struct
-Located (E) {
+Located (T) {
     LC          origin;    // projected = origin.of (project_image_len)
     bool[N]     way;       // [0,0] - +x,+y, [1,1] - -x,-y, [0,1] - +x,-y
     LC          len;
@@ -13,12 +12,8 @@ Located (E) {
     //
     Projected   projected;  // filled in draw
     //
-    E           e;
+    T           a;
 }
-
-alias ELocated = Located!E;
-
-alias E = int;
 
 struct 
 Projected {
@@ -30,13 +25,10 @@ char      [N_Childs] childs;
 Projected [N_Childs] uses;
 
 struct 
-Located_Container_Args (E) {
+Located_Container_Args {
     L            len;
     bool         overflow_wrap;
-    ELocatedTree s;
 }
-alias ELocated_Container_Args = Located_Container_Args!E;
-alias ELocatedTree = Tree!ELocated;
 
 struct
 LC {                   // SIMD optimized
@@ -57,12 +49,12 @@ enum N        = 2; // X,Y
 
 //
 void
-update (ELocated* a, ELocated_Container_Args* args) {
+update (Located_Container_Args) (Located* a, Located_Container_Args* args) {
     //
 }
 
 void
-draw (Renderer* renderer, ELocated* a) {
+draw (Located) (Renderer* renderer, Located* a) {
     // calc projected
     a.projected.len = a.origin.project (renderer.target_len);
 }
