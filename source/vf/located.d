@@ -40,43 +40,64 @@ Located_Container {  // extend E resources to Located_E resources
         void way_y         (bool b) { if (b) s |= Mask.way_y;         else s &= !Mask.way_y ; }
     }
 
-    struct
-    Located {
-        Defined   defined;
-        Projected projected;
-
-        struct 
-        Defined {
-            LC    loc;
-            LC    len;
-        }
-        struct 
-        Projected {
-            L     loc;
-            L     len;
-        }
-    }
     alias iLocated = ushort;
 }
 
+struct
+Located {
+    Defined   defined;
+    Projected projected;
 
-void
-go () {
-    //
-}
-
-void
-draw (Located) (Renderer* renderer, Located* located) {
-    // calc projected
-    located.projected.len = located.defined.len.project (renderer.target.len);
+    struct 
+    Defined {
+        LC    loc;
+        LC    len;
+    }
+    struct 
+    Projected {
+        L     loc;
+        L     len;
+    }
 }
 
 struct
-Renderer {
-    Target target;
+Projector {
+    Target* target;
 
-    struct
-    Target {
-        L len;
+    void
+    project (Located* located) {
+        // calc projected
+        located.projected.len = located.defined.len.project (target.len);
+    }
+}
+
+struct
+Target {
+    L len;
+}
+
+void
+go () {
+    // 1
+    {
+        auto target    = new Target (L ([100,100]));  // image 100x100
+        auto projector = new Projector (target);
+        auto located   = new Located (Located.Defined (LC(L(0),L(2)),LC(L(1),L(1))));  // loc,len (lu,100%)
+        projector.project (located);
+    }
+
+    // 2
+    {
+        auto target    = new Target (L ([100,100]));  // image 100x100
+        auto projector = new Projector (target);
+        auto located_container = 
+            new Located_Container (
+                Located_Container.Defined (), 
+                Located_Container.Projected (), 
+                [ Located (Located.Defined (LC(L(0),L(2)),LC(L(1),L(1)))) ]
+            );
+        foreach (ref _located; located_container.s) {
+            projector.project (&_located);
+        }
     }
 }

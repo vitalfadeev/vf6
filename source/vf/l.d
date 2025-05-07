@@ -15,4 +15,3 @@ LC {                   // SIMD optimized
 }
 
 alias L = int32x2;
-enum  N = 2; // X,Y

@@ -10,7 +10,7 @@ E {
 }
 
 struct
-ES {
+E_Container {
     E[] s;
 }
 
