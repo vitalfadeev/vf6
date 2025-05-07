@@ -1,15 +1,12 @@
 import std.stdio;
 import e          : E;
-import vf.located : Located,Located_Container_Args;
+import vf.located : Located_Container;
 import vf.tree    : Tree;
-
-alias ELocated_Container_Args = Located_Container_Args!E;
-alias ELocatedTree = Tree!(Located!E);
 
 
 void 
 main (string[] args) {
-    ELocatedTree root;
+    Located_Container located_container;
 
     writeln ("OK");
 }

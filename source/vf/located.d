@@ -1,65 +1,82 @@
 module vf.located;
 
-import vf.int32x2 : int32x2;
+import vf.l : L,LC;
 
 
 struct
-Located (T) {
-    LC          origin;    // projected = origin.of (project_image_len)
-    bool[N]     way;       // [0,0] - +x,+y, [1,1] - -x,-y, [0,1] - +x,-y
-    LC          len;
-    bool[N]     expand_len;
-    //
-    Projected   projected;  // filled in draw
-    //
-    T           a;
-}
+Located_Container {  // extend E resources to Located_E resources
+    Defined   defined;
+    Projected projected;
+    Located[] s;
 
-struct 
-Projected {
-    L loc;
-    L len;
-}
-
-char      [N_Childs] childs;
-Projected [N_Childs] uses;
-
-struct 
-Located_Container_Args {
-    L            len;
-    bool         overflow_wrap;
-}
-
-struct
-LC {                   // SIMD optimized
-    L len;             // length   : 0 50 100
-    L cap = L([1,1]);  // capacity : 1 2 100
-
-    L
-    project (L target_l) {
-        return target_l.muldiv (len,cap);
+    struct 
+    Defined {
+        LC    loc;
+        LC    len;
+        Flags flags;
     }
+    struct 
+    Projected {
+        L     loc;
+        L     len;
+    }
+    struct
+    Flags {
+        ubyte s;
+
+        enum 
+        Mask : typeof (s) {
+            overflow_wrap = 0b0000_0001,
+            way_x         = 0b0000_0010,
+            way_y         = 0b0000_0100,
+        }
+
+        auto overflow_wrap () { return (s & Mask.overflow_wrap); }
+        auto way_x         () { return (s & Mask.way_x); }
+        auto way_y         () { return (s & Mask.way_y); }
+
+        void overflow_wrap (bool b) { if (b) s |= Mask.overflow_wrap; else s &= !Mask.overflow_wrap ; }
+        void way_x         (bool b) { if (b) s |= Mask.way_x;         else s &= !Mask.way_x ; }
+        void way_y         (bool b) { if (b) s |= Mask.way_y;         else s &= !Mask.way_y ; }
+    }
+
+    struct
+    Located {
+        Defined   defined;
+        Projected projected;
+
+        struct 
+        Defined {
+            LC    loc;
+            LC    len;
+        }
+        struct 
+        Projected {
+            L     loc;
+            L     len;
+        }
+    }
+    alias iLocated = ushort;
 }
 
-alias L = int32x2;
 
-enum N_Childs = 0;
-enum N        = 2; // X,Y
-
-
-//
 void
-update (Located_Container_Args) (Located* a, Located_Container_Args* args) {
+go () {
     //
 }
 
 void
-draw (Located) (Renderer* renderer, Located* a) {
+draw (Located) (Renderer* renderer, Located* located) {
     // calc projected
-    a.projected.len = a.origin.project (renderer.target_len);
+    located.projected.len = located.defined.len.project (renderer.target.len);
 }
 
 struct
 Renderer {
-    L target_len;
+    Target target;
+
+    struct
+    Target {
+        L len;
+    }
 }
