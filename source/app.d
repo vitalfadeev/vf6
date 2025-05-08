@@ -71,5 +71,8 @@ test_3 () {
     }
 
     //
-
+    // auto target = Target (640,480);
+    //
+    // Projector ()
+    //   .project (root,target);
 }

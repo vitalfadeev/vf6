@@ -62,10 +62,8 @@ Located {
 
 struct
 Projector {
-    Target* target;
-
     void
-    project (Located* located) {
+    project (Located* located, Target* target) {
         // calc projected
         located.projected.len = located.defined.len.project (target.len);
     }
@@ -81,15 +79,15 @@ go () {
     // Located
     {
         auto target    = new Target (L ([100,100]));  // image 100x100
-        auto projector = new Projector (target);
+        auto projector = new Projector ();
         auto located   = new Located (Located.Defined (LC(L(0),L(2)),LC(L(1),L(1))));  // loc,len (lu,100%)
-        projector.project (located);
+        projector.project (located,target);
     }
 
     // Contained
     {
         auto target    = new Target (L ([100,100]));  // image 100x100
-        auto projector = new Projector (target);
+        auto projector = new Projector ();
         auto container = 
             new Container (
                 Container.Defined (), 
@@ -97,7 +95,7 @@ go () {
                 [ Located (Located.Defined ( LC(L(0),L(2)), LC(L(1),L(1))) ) ]
             );
         foreach (ref _located; container.s) {
-            projector.project (&_located);
+            projector.project (&_located,target);
         }
     }
 }

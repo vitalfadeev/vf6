@@ -1,12 +1,14 @@
 module e;
 
-import vf.l : L,LC;
+import vf.l  : L,LC;
+import klass : Klass;
 
 
 struct
 E {
-    bool hidden;
-    L    len;
+    bool    hidden;
+    L       len;
+    Klasses klasses;
 
     void
     add (E* b) {
@@ -20,3 +22,9 @@ E_Container {
 }
 
 alias iE = ushort;
+
+
+struct
+Klasses {
+    Klass*[] s;
+}

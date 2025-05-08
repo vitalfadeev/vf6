@@ -11,11 +11,11 @@ Klass {
     Defined {
         LC    _loc;
         LC    _len;
-        Flags flags;  // way
+        Flags _flags;  // way
 
         auto ref loc (string b) { cast (Loc) (_loc)  = b;}
         auto ref len (int[2] b) { cast (Len) (_len)  = b;}
-        auto ref way (string b) { cast (Way) (flags) = b;}
+        auto ref way (string b) { cast (Way) (_flags) = b;}
 
         struct
         Flags {
