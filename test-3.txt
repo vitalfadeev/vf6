@@ -1,0 +1,33 @@
+e root
+ e rect ul
+ e rect ul
+ e rect ul
+
+ e rect uc
+ e rect uc
+ e rect uc
+
+ e rect ur
+ e rect ur
+ e rect ur
+
+
+root
+  loc cc
+  len 640 480
+
+rect
+  len 64 64
+
+ul
+  loc ul
+  way rd
+
+uc
+  loc uc
+  way rd
+
+ur
+  loc ur
+  way ld
+

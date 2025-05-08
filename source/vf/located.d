@@ -4,7 +4,7 @@ import vf.l : L,LC;
 
 
 struct
-Located_Container {  // extend E resources to Located_E resources
+Container {  // extend E resources to Located_E resources
     Defined   defined;
     Projected projected;
     Located[] s;
@@ -78,7 +78,7 @@ Target {
 
 void
 go () {
-    // 1
+    // Located
     {
         auto target    = new Target (L ([100,100]));  // image 100x100
         auto projector = new Projector (target);
@@ -86,18 +86,20 @@ go () {
         projector.project (located);
     }
 
-    // 2
+    // Contained
     {
         auto target    = new Target (L ([100,100]));  // image 100x100
         auto projector = new Projector (target);
-        auto located_container = 
-            new Located_Container (
-                Located_Container.Defined (), 
-                Located_Container.Projected (), 
-                [ Located (Located.Defined (LC(L(0),L(2)),LC(L(1),L(1)))) ]
+        auto container = 
+            new Container (
+                Container.Defined (), 
+                Container.Projected (), 
+                [ Located (Located.Defined ( LC(L(0),L(2)), LC(L(1),L(1))) ) ]
             );
-        foreach (ref _located; located_container.s) {
+        foreach (ref _located; container.s) {
             projector.project (&_located);
         }
     }
 }
+
+

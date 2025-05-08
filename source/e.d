@@ -7,6 +7,11 @@ struct
 E {
     bool hidden;
     L    len;
+
+    void
+    add (E* b) {
+        //
+    }
 }
 
 struct
