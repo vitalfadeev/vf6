@@ -6,19 +6,21 @@ import klass : Klass;
 
 struct
 E {
+    // Located
     bool    hidden;
     L       len;
     Klasses klasses;
+}
+
+struct
+E_Container {
+    // Located
+    E[] s;
 
     void
     add (E* b) {
         //
     }
-}
-
-struct
-E_Container {
-    E[] s;
 }
 
 alias iE = ushort;

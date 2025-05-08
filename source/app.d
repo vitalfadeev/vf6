@@ -16,7 +16,7 @@ main (string[] args) {
 
 void
 test_3 () {
-    auto e_root      = new E ();
+    auto e_root      = new E_Container ();
 
     auto e_rect_ul_1 = new E ();
     auto e_rect_ul_2 = new E ();
@@ -71,8 +71,6 @@ test_3 () {
     }
 
     //
-    // auto target = Target (640,480);
-    //
-    // Projector ()
-    //   .project (root,target);
+    auto target = new Target (L ([640,480]));
+    //Projector ().project (e_root,target);
 }
