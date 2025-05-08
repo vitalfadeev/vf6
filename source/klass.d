@@ -14,7 +14,7 @@ Klass {
         Flags flags;  // way
 
         auto ref loc (string b) { cast (Loc) (_loc)  = b;}
-        auto ref len (string b) { cast (Len) (_len)  = b;}
+        auto ref len (int[2] b) { cast (Len) (_len)  = b;}
         auto ref way (string b) { cast (Way) (flags) = b;}
 
         struct
@@ -64,15 +64,12 @@ Len {
     LC len;
 
     void
-    opAssign (string b) {
-        if (b.length > 0) {
-            switch (b[0]) {
-                case 'u' : break;
-                case 'c' : ; break;
-                case 'd' : ; break;
-                default  :
-            }
-        }
+    opAssign (int[2] b) {
+        // [640,480]
+        len.len.s[0] = b[0];
+        len.cap.s[0] = 1;
+        len.len.s[1] = b[1];
+        len.cap.s[1] = 1;
     }
 }
 

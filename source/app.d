@@ -44,12 +44,12 @@ test_3 () {
     auto klass_root = new Klass ();
     with (klass_root) {
         defined.loc = "cc";
-        defined.len = "640 480";
+        defined.len = [640,480];
     }
 
     auto klass_rect = new Klass ();
     with (klass_rect) {
-        defined.len = "64 64";
+        defined.len = [64,64];
     }
 
     auto klass_ul   = new Klass ();
