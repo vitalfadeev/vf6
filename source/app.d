@@ -47,6 +47,12 @@ test_3 () {
         defined.len = [640,480];
     }
 
+    auto klass_e = new Klass ();
+    with (klass_root) {
+        defined.loc = [0,0];
+        defined.len = [0,0];
+    }
+
     auto klass_rect = new Klass ();
     with (klass_rect) {
         defined.len = [64,64];
@@ -71,6 +77,29 @@ test_3 () {
     }
 
     //
+    e_root     .klasses ~= klass_root;
+
+    e_rect_ul_1.klasses ~= klass_e;
+    e_rect_ul_1.klasses ~= klass_rect;
+    e_rect_ul_1.klasses ~= klass_ul;
+
+    e_rect_uc_1.klasses ~= klass_e;
+    e_rect_uc_1.klasses ~= klass_rect;
+    e_rect_uc_1.klasses ~= klass_uc;
+
+    e_rect_ur_1.klasses ~= klass_e;
+    e_rect_ur_1.klasses ~= klass_rect;
+    e_rect_ur_1.klasses ~= klass_ur;
+
+    //
     auto target = new Target (L ([640,480]));
     //Projector ().project (e_root,target);
 }
+
+
+// E - Resource
+// Tree - i[] -> Resources[i]
+//
+// Resources[] = [E0,E1,E2,E3]
+// Tree = E0 [E1,E2,E3]
+

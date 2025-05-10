@@ -29,4 +29,9 @@ alias iE = ushort;
 struct
 Klasses {
     Klass*[] s;
+
+    void
+    opOpAssign (string op : "~") (Klass* b) {
+        //
+    }
 }
