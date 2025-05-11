@@ -2,7 +2,6 @@ import std.stdio;
 import std.format;
 import std.conv;
 import e          : E,E_Container;
-import klass      : Klass;
 import vf.l       : L,LC,LL;
 import vf.located : Container,Located,Projector,Target;
 import vf.tree    : Tree;
@@ -294,7 +293,7 @@ Len {
 
 struct
 Way {
-    Klass.Defined.Flags flags;
+    Defined.Flags flags;
 
     void
     opAssign (string b) {
