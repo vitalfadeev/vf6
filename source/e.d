@@ -16,6 +16,7 @@ struct
 E_Container {
     // Located
     E[] s;
+    Klasses klasses;
 
     void
     add (E* b) {

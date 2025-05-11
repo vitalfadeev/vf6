@@ -14,4 +14,10 @@ LC {                   // SIMD optimized
     }
 }
 
+struct
+LL {
+    L loc;
+    L len;
+}
+
 alias L = int32x2;

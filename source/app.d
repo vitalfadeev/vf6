@@ -2,7 +2,7 @@ import std.stdio;
 import std.format;
 import e          : E,E_Container;
 import klass      : Klass;
-import vf.l       : L,LC;
+import vf.l       : L,LC,LL;
 import vf.located : Container,Located,Projector,Target;
 import vf.tree    : Tree;
 
@@ -96,6 +96,28 @@ test_3 () {
     //Projector ().project (e_root,target);
 }
 
+struct
+Event {
+    E*       root;
+    Styles*  styles;
+    Path*    path;
+    Window*  window;
+
+    struct
+    Styles {
+        //
+    }
+
+    struct
+    Path {
+        //
+    }
+
+    struct
+    Window {
+        //
+    }
+}
 
 // E - Resource
 // Tree - i[] -> Resources[i]
@@ -103,3 +125,78 @@ test_3 () {
 // Resources[] = [E0,E1,E2,E3]
 // Tree = E0 [E1,E2,E3]
 
+struct
+_Container {
+    IStyled[] s;                  // defined
+    LL[]      projected_loc_len;  // 
+}
+
+struct
+Resource_Style {
+    IStyle[] parents;
+    //
+    // loc
+    // len
+    // color
+    // font
+}
+
+struct
+Container_Style {
+    IStyle[] parents;
+    //
+    // len
+    // way
+}
+
+// Audacious
+// iFile iPlay iList iServices iExit iView \n
+// iSearch iOpen iAdd iProgress iTime \n
+// iPlaylist \n
+// iSongInfo \n
+// iStatus
+//
+// iProgress
+//   expand_len_x
+
+// Top Bar
+// iLeftUp
+//   1 2 3 \n
+// iCenterUp
+//   1 2 3 \n
+// iRightUp
+//   1 2 3 \n
+//
+// iLeftUp
+//   way    r
+// iCenterUp
+//   expand_len_x
+//   magnet center
+//   way    r
+// iRightUp
+//   way    l
+
+struct
+I {
+    char i;  // char wchar dchar size_t
+}
+
+struct
+IStyled {
+    I      i;  // char wchar dchar size_t
+    IStyle style;
+}
+
+struct
+IStyle {
+    char           i;
+    static Style[] styles;    
+}
+
+struct
+Style {
+    // loc
+    // len
+    // color
+    // font
+}
