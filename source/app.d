@@ -192,6 +192,15 @@ Style {
     }
 
     auto ref defined () { return s[i].defined; }
+
+    // Style_1 + Style_2 = Style_3
+    Style
+    opBinary (string op : "+") (Style b) {
+        alias a = this;
+        Style style = Style.NEW ();
+        Style.s[style.i] = Style.s[a.i] + Style.s[b.i];
+        return style;
+    }
 }
 
 struct
@@ -205,9 +214,21 @@ _Style {
     // Fonted
     //   font
     Defined defined;
+
+    _Style
+    opBinary (string op : "+") (_Style b) {
+        alias a = this;
+        _Style style = _Style ();
+        style.locate  = a.locate  + b.locate;
+        style.defined = a.defined + b.defined;
+        return style;
+    }
 }
 
-alias IStyled = _I!Style;
+// I + Style  = IStyled
+// I + Locate = ILocated
+alias IStyled  = _I!Style;
+alias ILocated = _I!Locate;
 
 struct
 _I (T) {  // I + T
@@ -229,11 +250,6 @@ _I (T) {  // I + T
         s[i.i] = b;
     }
 }
-
-// I + IStyle = IStyled
-// IStyle_1 + IStyle_2 = IStyle_3
-
-alias ILocated = _I!Locate;
 
 
 //
