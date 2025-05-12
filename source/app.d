@@ -3,7 +3,7 @@ import std.format;
 import std.conv;
 import e          : E,E_Container;
 import vf.l       : L,LC,LL;
-import vf.located : Container,Located,Projector,Target;
+import vf.located : Container,Locate,Projector,Target;
 import vf.tree    : Tree;
 
 
@@ -18,89 +18,89 @@ void
 test_3 () {
     auto i_root      = IStyled_Container ();
 
-    auto i_rect_ul_1 = IStyled ();
-    auto i_rect_ul_2 = IStyled ();
-    auto i_rect_ul_3 = IStyled ();
+    auto i_rect_ul_1 = I ();
+    auto i_rect_ul_2 = I ();
+    auto i_rect_ul_3 = I ();
 
-    auto i_rect_uc_1 = IStyled ();
-    auto i_rect_uc_2 = IStyled ();
-    auto i_rect_uc_3 = IStyled ();
+    auto i_rect_uc_1 = I ();
+    auto i_rect_uc_2 = I ();
+    auto i_rect_uc_3 = I ();
 
-    auto i_rect_ur_1 = IStyled ();
-    auto i_rect_ur_2 = IStyled ();
-    auto i_rect_ur_3 = IStyled ();
+    auto i_rect_ur_1 = I ();
+    auto i_rect_ur_2 = I ();
+    auto i_rect_ur_3 = I ();
 
-    i_root.content ~= i_rect_ul_1;
-    i_root.content ~= i_rect_ul_2;
-    i_root.content ~= i_rect_ul_3;
-    i_root.content ~= i_rect_uc_1;
-    i_root.content ~= i_rect_uc_2;
-    i_root.content ~= i_rect_uc_3;
-    i_root.content ~= i_rect_ur_1;
-    i_root.content ~= i_rect_ur_2;
-    i_root.content ~= i_rect_ur_3;
+    i_root.content ~= IStyled (i_rect_ul_1);
+    i_root.content ~= IStyled (i_rect_ul_2);
+    i_root.content ~= IStyled (i_rect_ul_3);
+    i_root.content ~= IStyled (i_rect_uc_1);
+    i_root.content ~= IStyled (i_rect_uc_2);
+    i_root.content ~= IStyled (i_rect_uc_3);
+    i_root.content ~= IStyled (i_rect_ur_1);
+    i_root.content ~= IStyled (i_rect_ur_2);
+    i_root.content ~= IStyled (i_rect_ur_3);
 
     //
-    auto _istyle_root = IStyle.NEW (
+    auto _style_root = Style.NEW (
         "loc cc", 
         "len 640,480"
     );
 
-    auto istyle_root_ = IStyle.NEW ();
-    with (istyle_root_) {
+    auto style_root_ = Style.NEW ();
+    with (style_root_) {
         defined.loc = "cc";
         defined.len = [640,480];
     }
 
-    auto istyle_root = IStyle.NEW ();
-    with (istyle_root) {
+    auto style_root = Style.NEW ();
+    with (style_root) {
         defined.loc = "cc";
         defined.len = [640,480];
     }
 
-    auto istyle_e = IStyle.NEW ();
-    with (istyle_root) {
+    auto style_e = Style.NEW ();
+    with (style_root) {
         defined.loc = [0,0];
         defined.len = [0,0];
     }
 
-    auto istyle_rect = IStyle.NEW ();
-    with (istyle_rect) {
+    auto style_rect = Style.NEW ();
+    with (style_rect) {
         defined.len = [64,64];
     }
 
-    auto istyle_ul   = IStyle.NEW ();
-    with (istyle_rect) {
+    auto style_ul   = Style.NEW ();
+    with (style_rect) {
         defined.loc = "ul";
         defined.way = "rd";
     }
 
-    auto istyle_uc   = IStyle.NEW ();
-    with (istyle_rect) {
+    auto style_uc   = Style.NEW ();
+    with (style_rect) {
         defined.loc = "uc";
         defined.way = "rd";
     }
 
-    auto istyle_ur   = IStyle.NEW ();
-    with (istyle_rect) {
+    auto style_ur   = Style.NEW ();
+    with (style_rect) {
         defined.loc = "ur";
         defined.way = "ld";
     }
 
     //
-    i_root      = istyle_root;
+    i_root = style_root;
 
-    i_rect_ul_1 = istyle_e;
-    i_rect_ul_1 = istyle_rect;
-    i_rect_ul_1 = istyle_ul;
+    IStyled (i_rect_ul_1) = style_e;
+    IStyled (i_rect_ul_1) = style_rect;
+    IStyled (i_rect_ul_1) = style_ul;
 
-    i_rect_uc_1 = istyle_e;
-    i_rect_uc_1 = istyle_rect;
-    i_rect_uc_1 = istyle_uc;
+    IStyled (i_rect_uc_1) = style_e;
+    IStyled (i_rect_uc_1) = style_rect;
+    IStyled (i_rect_uc_1) = style_uc;
 
-    i_rect_ur_1 = istyle_e;
-    i_rect_ur_1 = istyle_rect;
-    i_rect_ur_1 = istyle_ur;
+    IStyled (i_rect_ur_1) = style_e;
+    IStyled (i_rect_ur_1) = style_rect;
+    IStyled (i_rect_ur_1) = style_ur;
 
     //
     auto target = new Target (L ([640,480]));
@@ -166,38 +166,38 @@ Event {
 struct
 I {
     char i;  // char wchar dchar size_t
+    // mixin S!I;
 }
 
-struct
-IStyled {
-    I      i;  // char wchar dchar size_t
-    IStyle istyle;
-
-    void
-    opAssign (IStyle b) {
-        istyle = b;
-    }
-}
+enum I_MAX      = I.i.max;
+enum STYLES_MAX = Style.i.max;
 
 struct
-IStyle {
-    char           i;
-    static Style[] s;
+Style {
+    char            i;
+
+    //
+    static _Style[] s;  // all styles
 
     static
-    IStyle
+    this () {
+        s.reserve (STYLES_MAX);
+    }
+
+    static
+    Style
     NEW (ARGS...) (ARGS args) {
         s.length++;
-        return IStyle ((s.length-1).to!char);
+        return Style ((s.length-1).to!(typeof(i)));
     }
 
     auto ref defined () { return s[i].defined; }
 }
 
 struct
-Style {
-    Located located;
-    // Located
+_Style {
+    Locate locate;
+    // Locate
     //   loc
     //   len
     // Colored
@@ -207,9 +207,36 @@ Style {
     Defined defined;
 }
 
+alias IStyled = _I!Style;
+
+struct
+_I (T) {  // I + T
+    I          i;
+    static T[] s;
+
+    static
+    this () {
+        s.reserve (I_MAX);
+    }
+
+    auto ref
+    opIndex (I i) {
+        return s[i.i];
+    }
+
+    void
+    opAssign (T b) {
+        s[i.i] = b;
+    }
+}
+
 // I + IStyle = IStyled
 // IStyle_1 + IStyle_2 = IStyle_3
 
+alias ILocated = _I!Locate;
+
+
+//
 struct
 IStyled_Container {
     // defined
@@ -217,10 +244,10 @@ IStyled_Container {
     // projected
     LL[]      ll;
 
-    alias content = s;
+    auto ref content () { return s; }
 
     void
-    opAssign (IStyle b) {
+    opAssign (Style b) {
         //
     }
 }

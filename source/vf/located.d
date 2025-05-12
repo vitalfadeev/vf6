@@ -7,7 +7,7 @@ struct
 Container {  // extend E resources to Located_E resources
     Defined   defined;
     Projected projected;
-    Located[] s;
+    Locate[]  s;
 
     struct 
     Defined {
@@ -44,7 +44,7 @@ Container {  // extend E resources to Located_E resources
 }
 
 struct
-Located {
+Locate {
     Defined   defined;
     Projected projected;
 
@@ -63,9 +63,9 @@ Located {
 struct
 Projector {
     void
-    project (Located* located, Target* target) {
+    project (Locate* locate, Target* target) {
         // calc projected
-        located.projected.len = located.defined.len.project (target.len);
+        locate.projected.len = locate.defined.len.project (target.len);
     }
 }
 
@@ -76,12 +76,12 @@ Target {
 
 void
 go () {
-    // Located
+    // Locate
     {
         auto target    = new Target (L ([100,100]));  // image 100x100
         auto projector = new Projector ();
-        auto located   = new Located (Located.Defined (LC(L(0),L(2)),LC(L(1),L(1))));  // loc,len (lu,100%)
-        projector.project (located,target);
+        auto locate    = new Locate (Locate.Defined (LC(L(0),L(2)),LC(L(1),L(1))));  // loc,len (lu,100%)
+        projector.project (locate,target);
     }
 
     // Contained
@@ -92,7 +92,7 @@ go () {
             new Container (
                 Container.Defined (), 
                 Container.Projected (), 
-                [ Located (Located.Defined ( LC(L(0),L(2)), LC(L(1),L(1))) ) ]
+                [ Locate (Locate.Defined ( LC(L(0),L(2)), LC(L(1),L(1))) ) ]
             );
         foreach (ref _located; container.s) {
             projector.project (&_located,target);
