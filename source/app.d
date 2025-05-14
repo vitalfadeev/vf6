@@ -16,91 +16,91 @@ main (string[] args) {
 
 void
 test_3 () {
-    auto i_root      = IStyled_Container ();
+    auto e_root      = IE_Container ();
 
-    auto i_rect_ul_1 = I ();
-    auto i_rect_ul_2 = I ();
-    auto i_rect_ul_3 = I ();
+    auto e_rect_ul_1 = IE ();
+    auto e_rect_ul_2 = IE ();
+    auto e_rect_ul_3 = IE ();
 
-    auto i_rect_uc_1 = I ();
-    auto i_rect_uc_2 = I ();
-    auto i_rect_uc_3 = I ();
+    auto e_rect_uc_1 = IE ();
+    auto e_rect_uc_2 = IE ();
+    auto e_rect_uc_3 = IE ();
 
-    auto i_rect_ur_1 = I ();
-    auto i_rect_ur_2 = I ();
-    auto i_rect_ur_3 = I ();
+    auto e_rect_ur_1 = IE ();
+    auto e_rect_ur_2 = IE ();
+    auto e_rect_ur_3 = IE ();
 
-    i_root.content ~= IStyled (i_rect_ul_1);
-    i_root.content ~= IStyled (i_rect_ul_2);
-    i_root.content ~= IStyled (i_rect_ul_3);
-    i_root.content ~= IStyled (i_rect_uc_1);
-    i_root.content ~= IStyled (i_rect_uc_2);
-    i_root.content ~= IStyled (i_rect_uc_3);
-    i_root.content ~= IStyled (i_rect_ur_1);
-    i_root.content ~= IStyled (i_rect_ur_2);
-    i_root.content ~= IStyled (i_rect_ur_3);
+    e_root.content ~= e_rect_ul_1;
+    e_root.content ~= e_rect_ul_2;
+    e_root.content ~= e_rect_ul_3;
+    e_root.content ~= e_rect_uc_1;
+    e_root.content ~= e_rect_uc_2;
+    e_root.content ~= e_rect_uc_3;
+    e_root.content ~= e_rect_ur_1;
+    e_root.content ~= e_rect_ur_2;
+    e_root.content ~= e_rect_ur_3;
 
     //
-    auto _style_root = Style.NEW (
+    auto _style_root = IStyle.NEW (
         "loc cc", 
         "len 640,480"
     );
 
-    auto style_root_ = Style.NEW ();
+    auto style_root_ = IStyle.NEW ();
     with (style_root_) {
         defined.loc = "cc";
         defined.len = [640,480];
     }
 
-    auto style_root = Style.NEW ();
+    auto style_root = IStyle.NEW ();
     with (style_root) {
         defined.loc = "cc";
         defined.len = [640,480];
     }
 
-    auto style_e = Style.NEW ();
-    with (style_root) {
+    auto style_e = IStyle.NEW ();
+    with (style_e) {
         defined.loc = [0,0];
         defined.len = [0,0];
     }
 
-    auto style_rect = Style.NEW ();
+    auto style_rect = IStyle.NEW ();
     with (style_rect) {
         defined.len = [64,64];
     }
 
-    auto style_ul   = Style.NEW ();
+    auto style_ul   = IStyle.NEW ();
     with (style_rect) {
         defined.loc = "ul";
-        defined.way = "rd";
+//        defined.way = "rd";
     }
 
-    auto style_uc   = Style.NEW ();
+    auto style_uc   = IStyle.NEW ();
     with (style_rect) {
         defined.loc = "uc";
-        defined.way = "rd";
+//        defined.way = "rd";
     }
 
-    auto style_ur   = Style.NEW ();
+    auto style_ur   = IStyle.NEW ();
     with (style_rect) {
         defined.loc = "ur";
-        defined.way = "ld";
+//        defined.way = "ld";
     }
 
     //
-    i_root = style_root;
+    e_root = style_root;
 
-    IStyled (i_rect_ul_1) = style_e;
-    IStyled (i_rect_ul_1) = style_rect;
-    IStyled (i_rect_ul_1) = style_ul;
+    (cast (IE) (e_rect_ul_1)).defined.styles ~= style_e;
+    (cast (IE) (e_rect_ul_1)).defined.styles ~= style_rect;
+    (cast (IE) (e_rect_ul_1)).defined.styles ~= style_ul;
 
-    IStyled (i_rect_uc_1) = style_e;
-    IStyled (i_rect_uc_1) = style_rect;
-    IStyled (i_rect_uc_1) = style_uc;
+    (cast (IE) (e_rect_uc_1)).defined.styles ~= style_e;
+    (cast (IE) (e_rect_uc_1)).defined.styles ~= style_rect;
+    (cast (IE) (e_rect_uc_1)).defined.styles ~= style_uc;
 
-    IStyled (i_rect_ur_1) = style_e;
-    IStyled (i_rect_ur_1) = style_rect;
-    IStyled (i_rect_ur_1) = style_ur;
+    (cast (IE) (e_rect_ur_1)).defined.styles ~= style_e;
+    (cast (IE) (e_rect_ur_1)).defined.styles ~= style_rect;
+    (cast (IE) (e_rect_ur_1)).defined.styles ~= style_ur;
 
     //
     auto target = new Target (L ([640,480]));
@@ -170,11 +170,11 @@ I {
 }
 
 enum I_MAX      = I.i.max;
-enum STYLES_MAX = Style.i.max;
+enum STYLES_MAX = IStyle.i.max;
 
 struct
-Style {
-    char            i;
+IStyle {
+    char            i;  // style index
 
     //
     static _Style[] s;  // all styles
@@ -185,35 +185,65 @@ Style {
     }
 
     static
-    Style
+    IStyle
     NEW (ARGS...) (ARGS args) {
         s.length++;
-        return Style ((s.length-1).to!(typeof(i)));
+        return IStyle ((s.length-1).to!(typeof(i)));
     }
 
     auto ref defined () { return s[i].defined; }
 
     // Style_1 + Style_2 = Style_3
-    Style
-    opBinary (string op : "+") (Style b) {
+    IStyle
+    opBinary (string op : "+") (IStyle b) {
         alias a = this;
-        Style style = Style.NEW ();
-        Style.s[style.i] = Style.s[a.i] + Style.s[b.i];
+        IStyle style = IStyle.NEW ();
+        // search style with [a.i, b.i]
+        //   use
+        // or
+        //   create
+        IStyle.s[style.i] = IStyle.s[a.i] + IStyle.s[b.i];
         return style;
     }
 }
 
 struct
 _Style {
-    Locate locate;
-    // Locate
-    //   loc
-    //   len
-    // Colored
-    //   color
-    // Fonted
-    //   font
-    Defined defined;
+    Defined   defined;
+    //Projected projected;  // in E.projected.style
+
+    struct
+    Defined {        
+        Locate.Defined  locate;
+        Color .Defined  color;
+        Content.Defined content;
+
+        //auto ref loc ()         { return cast (Loc) (locate.loc); }
+        void     loc (string b) { cast (Loc) (locate.loc)   = b; }
+        void     len (int[2] b) { cast (Len) (locate.len)   = b; }
+        
+//        void     way (string b) { cast (Way) (container_locate.flags) = b; }
+        // Locate
+        //   loc
+        //   len
+        // Color
+        //   color
+        // Image
+        //   image.src
+        // Text
+        //   text.font
+        //   text.char_len.x
+        //   text.char_len.y
+        // Childs
+        //   childs
+    }
+
+    struct
+    Projected {
+        Locate .Projected locate;
+        Color  .Projected  color;
+        Content.Projected  content;
+    }
 
     _Style
     opBinary (string op : "+") (_Style b) {
@@ -225,9 +255,77 @@ _Style {
     }
 }
 
+struct
+Content {
+    struct
+    Defined {
+        //
+    }
+
+    struct
+    Projected {
+        union {
+            Type               type;  // image, text, childs
+            _Image .Projected  image;
+            _Text  .Projected  text;
+            _Childs.Projected  childs;
+        }                
+    }
+
+    enum
+    Type : byte {
+        _,
+        image,
+        text,
+        childs,
+    }
+
+    struct
+    _Image {
+        Type type = Type.image;
+
+        struct
+        Defined {
+            //
+        }
+        struct
+        Projected {
+            //
+        }
+    }
+
+    struct
+    _Text {
+        Type type = Type.text;
+
+        struct
+        Defined {
+            //
+        }
+        struct
+        Projected {
+            //
+        }
+    }
+
+    struct
+    _Childs {
+        Type type = Type.childs;
+
+        struct
+        Defined {
+            //
+        }
+        struct
+        Projected {
+            //
+        }
+    }
+}
+
 // I + Style  = IStyled
 // I + Locate = ILocated
-alias IStyled  = _I!Style;
+alias IStyled  = _I!_Style;
 alias ILocated = _I!Locate;
 
 struct
@@ -252,24 +350,56 @@ _I (T) {  // I + T
 }
 
 
+struct
+IE {
+    char        i;
+    //
+    static _E[] s;
+
+    auto ref defined () { return s[i].defined; }
+}
+
+struct
+_E {
+    Defined   defined;
+    Projected projected;
+
+    struct
+    Defined {
+        IStyle[]    styles;  // loc, len, color
+    }
+
+    struct
+    Projected {
+        _Style.
+          Projected style;
+    }
+}
+
+
 //
 struct
-IStyled_Container {
+IE_Container {
     // defined
-    IStyled[] s;
+    IE[] s;
     // projected
-    LL[]      ll;
+    LL[] ll;
 
     auto ref content () { return s; }
 
     void
-    opAssign (Style b) {
+    opAssign (_Style b) {
+        //
+    }
+
+    void
+    opAssign (IStyle b) {
         //
     }
 }
 
 //
-Defined defined;
+//Defined defined;
 struct
 Defined {
     LC    _loc;
@@ -362,3 +492,34 @@ Way {
     }
 }
 
+struct
+Color {
+    Defined   defined;
+    Projected projected;
+
+    struct
+    Defined {
+        //
+    }
+
+    struct
+    Projected {
+        //
+    }
+}
+
+
+// Style
+//   defined
+//     loc
+//     len
+//   projected
+//     in to e.projected.style
+//
+// E
+//   defined
+//     styles[]
+//   projected
+//     style
+//       loc
+//       len
