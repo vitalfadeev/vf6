@@ -439,7 +439,7 @@ Text_Style_Image {
     this (string a) {
         static 
         if (is (typeof (IChar.i) == char)) {
-            this.char_s = cast (IChar[]) a.ptr[0..a.length];
+            this.char_s         = cast (IChar[]) a.ptr[0..a.length];
             this.style_s.length = this.char_s.length;
         }
         else
@@ -448,8 +448,7 @@ Text_Style_Image {
 
     void
     opAssign (Style style) {
-        auto istyle = IStyle (style);
-        style_s[] = istyle;
+        style_s[] = IStyle (style);
     }
 
     struct
@@ -507,6 +506,9 @@ go (string args) {
     auto text    = Text_Style_Image ("Hi!");
     auto style_0 = Text_Style_Image.Style ("t", "white", "PT Caption.ttf", "16", "16", "false", "false");
     text = style_0;
+    writeln (text);
+    auto style_1 = Text_Style_Image.Style ("t", "red", "PT Caption.ttf", "16", "16", "false", "false");
+    text = style_1;
     writeln (text);
     //
     auto target = new Target (L ([640,480]));
