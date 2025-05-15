@@ -1,6 +1,7 @@
 import std.stdio;
 import std.format;
 import std.conv;
+import std.algorithm;
 import e          : E,E_Container;
 import vf.l       : L,LC,LL;
 import vf.located : Container,Locate,Projector,Target;
@@ -11,6 +12,7 @@ void
 main (string[] args) {
     import vf.located;
     vf.located.go ();
+    go ("2");
     writeln ("OK");
 }
 
@@ -434,11 +436,39 @@ Text_Style_Image {
     // projected
     LL[]     rects;
 
+    this (string a) {
+        static 
+        if (is (typeof (IChar.i) == char)) {
+            this.char_s = cast (IChar[]) a.ptr[0..a.length];
+            this.style_s.length = this.char_s.length;
+        }
+        else
+            assert (0, "unsupported type");
+    }
+
+    void
+    opAssign (Style style) {
+        auto istyle = IStyle (style);
+        style_s[] = istyle;
+    }
+
     struct
     IStyle {
         char i;
         //
         static Style[] s;
+
+        this (Style b) {
+            // find or create
+            auto _i = s.countUntil (b);
+            if (_i != -1) // found
+                i = _i.to!(typeof(i));
+            else {  // not found
+                // create
+                s ~= b;
+                i = (s.length-1).to!(typeof(i));
+            }
+        }
     }
 
     struct
@@ -472,6 +502,16 @@ IChar {
     char i;
 }
 
+void
+go (string args) {
+    auto text    = Text_Style_Image ("Hi!");
+    auto style_0 = Text_Style_Image.Style ("t", "white", "PT Caption.ttf", "16", "16", "false", "false");
+    text = style_0;
+    writeln (text);
+    //
+    auto target = new Target (L ([640,480]));
+    //Projector ().project (text,target);
+}
 
 //
 //Defined defined;
