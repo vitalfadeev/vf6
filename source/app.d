@@ -451,6 +451,23 @@ Text_Style_Image {
         style_s[] = IStyle (style);
     }
 
+    auto
+    opSlice (size_t a, size_t b) {
+        return Text_Style_Image_Slice (&this,a,b);
+    }
+
+    struct
+    Text_Style_Image_Slice {
+        Text_Style_Image* src;
+        size_t a;
+        size_t b;
+
+        void
+        opAssign (Style style) {
+            (*src).style_s[a..b] = IStyle (style);
+        }
+    }
+
     struct
     IStyle {
         char i;
@@ -503,13 +520,17 @@ IChar {
 
 void
 go (string args) {
-    auto text    = Text_Style_Image ("Hi!");
-    auto style_0 = Text_Style_Image.Style ("t", "white", "PT Caption.ttf", "16", "16", "false", "false");
-    text = style_0;
+    auto text = Text_Style_Image ("Hi!");
+
+    text = Text_Style_Image.Style ("t", "white", "PT Caption.ttf", "16", "16", "false", "false");
     writeln (text);
-    auto style_1 = Text_Style_Image.Style ("t", "red", "PT Caption.ttf", "16", "16", "false", "false");
-    text = style_1;
+
+    text = Text_Style_Image.Style ("t", "red", "PT Caption.ttf", "16", "16", "false", "false");
     writeln (text);
+
+    text[1..2] = Text_Style_Image.Style ("t", "green", "PT Caption.ttf", "16", "16", "false", "false");
+    writeln (text);
+
     //
     auto target = new Target (L ([640,480]));
     //Projector ().project (text,target);
