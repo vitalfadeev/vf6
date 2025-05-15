@@ -90,17 +90,17 @@ test_3 () {
     //
     e_root = style_root;
 
-    (cast (IE) (e_rect_ul_1)).defined.styles ~= style_e;
-    (cast (IE) (e_rect_ul_1)).defined.styles ~= style_rect;
-    (cast (IE) (e_rect_ul_1)).defined.styles ~= style_ul;
+    e_rect_ul_1.defined.styles ~= style_e;
+    e_rect_ul_1.defined.styles ~= style_rect;
+    e_rect_ul_1.defined.styles ~= style_ul;
 
-    (cast (IE) (e_rect_uc_1)).defined.styles ~= style_e;
-    (cast (IE) (e_rect_uc_1)).defined.styles ~= style_rect;
-    (cast (IE) (e_rect_uc_1)).defined.styles ~= style_uc;
+    e_rect_uc_1.defined.styles ~= style_e;
+    e_rect_uc_1.defined.styles ~= style_rect;
+    e_rect_uc_1.defined.styles ~= style_uc;
 
-    (cast (IE) (e_rect_ur_1)).defined.styles ~= style_e;
-    (cast (IE) (e_rect_ur_1)).defined.styles ~= style_rect;
-    (cast (IE) (e_rect_ur_1)).defined.styles ~= style_ur;
+    e_rect_ur_1.defined.styles ~= style_e;
+    e_rect_ur_1.defined.styles ~= style_rect;
+    e_rect_ur_1.defined.styles ~= style_ur;
 
     //
     auto target = new Target (L ([640,480]));
@@ -357,6 +357,7 @@ IE {
     static _E[] s;
 
     auto ref defined () { return s[i].defined; }
+    auto ref styles  () { return s[i].defined.styles; }
 }
 
 struct
@@ -397,6 +398,80 @@ IE_Container {
         //
     }
 }
+
+struct
+Text {
+    // defined
+    char[] s;
+    // projected
+    LL[] rects;
+}
+
+struct
+Text_Style {
+    // defined
+    char[]  char_s;   // same len
+    Style[] style_s;  // 
+
+    struct
+    Style {
+        // char style
+        string color;
+        string font;
+        string char_len_x;
+        string char_len_y;
+        string char_bold;
+        string char_italic;
+    }
+    // projected
+    LL[] rects;
+}
+struct
+Text_Style_Image {
+    // defined
+    IChar[]  char_s;   // same len
+    IStyle[] style_s;  // 
+    // projected
+    LL[]     rects;
+
+    struct
+    IStyle {
+        char i;
+        //
+        static Style[] s;
+    }
+
+    struct
+    Style {
+        string type;               // char, image
+        union {
+            struct {
+                // char style
+                string char_color;
+                string char_font;  // = image_set
+                string char_len_x;
+                string char_len_y;
+                string char_bold;
+                string char_italic;
+            }
+            struct {
+                // image style
+                string image_color;
+                string image_set;  // = font
+                string image_len_x;
+                string image_len_y;
+                string image_scale_keep_x;
+                string image_scale_keep_y;
+            }
+        }
+    }
+}
+
+struct
+IChar {
+    char i;
+}
+
 
 //
 //Defined defined;
@@ -523,3 +598,35 @@ Color {
 //     style
 //       loc
 //       len
+
+
+// Text
+//   char[] s
+//
+// Text + Style
+//   char[]  char_s
+//   Style[] style_s
+// Style
+//   color
+//   font
+//   char_len_x
+//   char_len_y
+//   char_bold
+//   char_italic
+//
+// Text + Style + Image
+//   char[]  char_s
+//   Style[] style_s
+// Style
+//   color
+//   font
+//   char_len_x
+//   char_len_y
+//   char_bold
+//   char_italic
+//                    char_s -> image_set[char_s] -> image
+//   image_set = font
+//   image_len_x
+//   image_len_y
+//   image_scale_keep_x
+//   image_scale_keep_y
