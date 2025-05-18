@@ -10,10 +10,10 @@
 		"bindbc-sdl"    : {"path": "./deps/bindbc-sdl"},
 		"bindbc-common" : {"path": "./deps/bindbc-common"},
 		"bindbc-loader" : {"path": "./deps/bindbc-loader"},
-		"bindbc-sdlgfx" : {"path": "./deps/bindbc-sdlgfx"},
+		"bindbc-sdlgfx" : {"path": "./deps/bindbc-sdlgfx"}
 	},
 	"versions"     : ["SDL_2_26", "SDL_Image_2_6", "SDL_TTF_2_20", 
-		"SSE_4_2", "int32x2_SSE_4_2"],
+		"SSE_4_2", "int32x2_SSE_4_2", "int8x4_SSE_4_2"],
 	"dflags"       : [ "-mixin=mixins.d" ],
 	"buildOptions": ["ignoreDeprecations"],
 }
