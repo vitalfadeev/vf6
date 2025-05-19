@@ -15,8 +15,9 @@ main (string[] args) {
     //vf.located.go ();
     //go ("2");
     //writeln ("OK");
-    go2 ();
+    //go2 ();
     //go3 ();
+    go4 ();
 }
 
 void
@@ -407,9 +408,31 @@ IE_Container {
 struct
 Text {
     // defined
-    char[] s;
+    IChar[] s;
+
+    this (string a) {
+        static 
+        if (is (typeof (IChar.i) == char)) {
+            this.s = cast (IChar[]) a.ptr[0..a.length];
+        }
+        else
+            assert (0, "unsupported type");
+    }
+
+    int
+    opApply (int delegate (IChar) dg) {
+        foreach (ref c; s)
+            if (auto result = dg (c))
+                return result;
+
+        return 0;    
+    }
+
     // projected
-    LL[] rects;
+    // in Console_Target
+    // in Screen_Target
+    // in Image_Target
+    //   LL[] rects;
 }
 
 struct
@@ -514,7 +537,10 @@ Text_Style {
     }
 
     // projected
-    LL[] rects;
+    //   in Console_Target
+    //   in Screen_Target
+    //   in Image_Target
+    //     LL[] rects;
 }
 
 void
@@ -530,6 +556,21 @@ go2 () {
     //
     auto text2 = Text_Style ("The text!") ~ Text_Style ("[ OK ]", Text_Style.Style ("G"));
     std.stdio.writeln (text2);
+
+    //auto text      = Text ("The text! [ OK ]");
+    //auto projector = Console_Projector ();
+    //auto projected = text + projector;
+
+    //auto text   = Text ("The text! [ OK ]");
+    //auto writer = Console_Writer ();
+    //auto writed = writer + text;
+
+    //auto text_styled = text + style;
+    //auto text_styled = text[0..10] + style;
+    //text_styled[10..$] = style;
+
+//auto projector = Console_Projector ();
+//auto projected = projector.project (text,target);
 }
 
 struct
@@ -924,4 +965,30 @@ RGB {
         int  bg    = 40;
         return format!"%s%d;%d;%dm" (start,sc.style,30+sc.color,bg);
     }    
+}
+
+struct
+Console_Writer {
+    Console_Writed
+    opBinary (string op : "+") (Text b) {
+        auto writed = Console_Writed ();
+        foreach (IChar c; b) {
+            writed.rects ~= LL (L(1), L(1));
+            std.stdio.write (c);
+        }
+        return writed;
+    }
+}
+
+struct
+Console_Writed {
+    LL[] rects;  // 1col,1row x 1col,1row
+}
+
+void
+go4 () {
+    // text + writer -> writed
+    auto text   = Text ("The text! [ OK ]");
+    auto writer = Console_Writer ();
+    auto writed = writer + text;
 }
